@@ -2,7 +2,6 @@
   "name": "lab1",
   "version": "1.0.0",
   "description": "",
-  "main": "App_01-01.js",
   "scripts": {
     "Application": "node App_01-02.js"
   },

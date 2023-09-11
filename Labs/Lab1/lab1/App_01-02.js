@@ -2,7 +2,7 @@ let http = require('http');
 
 let h = (r)=>{
     let rc = '';
-    for (key in r.headers) rc += '<h3>' + key + ':' + r.headers[key] + '</h3>';
+    for (let key in r.headers) rc += '<h3>' + key + ':' + r.headers[key] + '</h3>';
     return rc;
 };
 
@@ -11,7 +11,7 @@ http.createServer(function (req, res){
     req.on('data', str => {b += str; console.log('data', b)})
     res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'});
     req.on('end', () => res.end(
-        '<!DOCKTYPE html> <html><head></head>' +
+        '<!DOCKTYPE html> <html lang="ru"><head><title>Lab1</title></head>' +
         '<body>' +
         '<h1>Структура запроса</h1>' +
         '<h2>' + 'метод: ' + req.method +'</h2>' +
