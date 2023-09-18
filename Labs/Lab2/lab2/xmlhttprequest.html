@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 4</title>
+</head>
+<body>
+    <div id="section"></div>
+</body>
+<script>
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:5000/api/name', true);
+    xhr.onreadystatechange  = () => {
+        if (xhr.status === 200 && xhr.readyState === 4) {
+            document.getElementById('section').innerHTML = xhr.responseText;
+        }
+    }
+    xhr.send();
+</script>
+</html>
