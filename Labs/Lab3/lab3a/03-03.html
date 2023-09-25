@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание №3</title>
+</head>
+<body>
+<div id="content"></div>
+<script type="text/javascript">
+    content.innerHTML = "";
+    let n = 0;
+    const d = Date.now();
+    for (let i = 0; i < 20; i++) {
+        fetch(`/fact?k=${i}`, {method: "GET", mode: "no-cors", headers: {'Accept': 'application/json'}})
+            .then(response => response.json())
+            .then(pdata => content.innerHTML += (n++) + ". Результат: " + (Date.now() - d) + '-' +
+                pdata.k + "/" + pdata.factorial + "<br/>")
+    }
+</script>
+</body>
+</html>
