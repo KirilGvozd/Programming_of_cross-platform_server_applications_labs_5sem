@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание №1</title>
+    <style>
+        * {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            height: 40px;
+            margin: -4px 0;
+            padding: 5px;
+            align-items: center;
+        }
+
+        input {
+            height: 25px;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+        }
+
+        p {
+            margin-right: 10px;
+        }
+
+        .container {
+            margin: 20px 0 60px 5px;
+        }
+
+        button {
+            height: 2em;
+            font-size: 1rem;
+            background-color: rgb(248, 248, 248);
+            color: #2f2f2f;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="select_result"></div>
+
+<button onclick="select()">Получить все данные</button>
+
+<br/>
+<div style="padding: 20px">
+    <div class='row'>
+        <label for="ID">ID</label>
+        <input type="number" id="ID" min="0"/>
+    </div>
+    <div class='row'>
+        <label for="Name">Имя</label>
+        <input type="text" id="Name"/>
+    </div>
+    <div class='row'>
+        <label for="Bday">День рождения</label>
+        <input type="date" id="Bday"/>
+    </div>
+
+    <div class='row'>
+        <button onclick="insert()">Добавить</button>
+    </div>
+    <div class='row'>
+        <button onclick="update()">Обновить по ID</button>
+    </div>
+    <div class='row'>
+        <button onclick="remove()">Удалить по ID</button>
+    </div>
+</div>
+
+<script>
+    const select = () => {
+        fetch("/api/db", {method: "GET", headers: {'Accept': 'application/json'}, mode: "no-cors"})
+            .then(response => response.json())
+            .then(data => {
+                select_result.innerHTML = "";
+                data.forEach(el => select_result.innerHTML += `${el.id}. ${el.name} - ${el.bday}<br>`);
+            })
+    }
+    const insert = () => {
+        fetch("/api/db", {
+            method: "POST",
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
+            mode: "no-cors",
+            body: JSON.stringify({
+                id: ID.value,
+                name: Name.value,
+                bday: Bday.value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                ID.value = "";
+                Name.value = "";
+                Bday.value = "";
+            })
+    }
+
+    const update = () => {
+        fetch("/api/db", {
+            method: "PUT",
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
+            body: JSON.stringify({
+                id: ID.value,
+                name: Name.value,
+                bday: Bday.value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                ID.value = "";
+                Name.value = "";
+                Bday.value = "";
+            })
+    };
+
+    const remove = () => {
+        fetch("/api/db", {
+            method: "DELETE",
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
+            body: JSON.stringify({
+                id: ID.value,
+                name: Name.value,
+                bday: Bday.value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                ID.value = "";
+                Name.value = "";
+                Bday.value = "";
+            })
+    };
+</script>
+</body>
+</html>
