@@ -25,7 +25,7 @@ async function thirdJobResult (data) {
     }
 }
 
-thirdJob(11).then((result) => {
+thirdJob(12).then((result) => {
     console.log('ThirdJob success: ', result);
 })
     .catch((error) => {

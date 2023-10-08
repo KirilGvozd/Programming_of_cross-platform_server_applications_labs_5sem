@@ -3,9 +3,10 @@ const EventEmitter = require('events');
 
 class DB extends EventEmitter {
     db_data = [
-        {id: 1, name: 'Kirill', bday: '12-12-2012'},
-        {id: 2, name: 'Oleg', bday: '11-11-2011'},
-        {id: 3, name: 'Natalie.', bday: '10-10-2010'},
+        {id: 1, name: 'Kirill.', bday: '11-9-2001'},
+        {id: 2, name: 'Oleg.', bday: '8-04-1994'},
+        {id: 3, name: 'Vlad', bday: '1-09-2010'},
+        {id: 4, name: 'Natalie', bday: '27-11-2021'},
     ]
 
     async select() {
