@@ -44,37 +44,56 @@
             margin: 20px 0;
             cursor: pointer;
         }
+        #error {
+            color: red;
+            font-size: 200pt;
+        }
     </style>
 </head>
 <body>
+<div id="error"></div>
+<br/>
 <div id="select_result"></div>
-
-<button onclick="select()">Получить все данные</button>
+<button onclick="select()">Get all data</button>
 
 <br/>
-<div style="padding: 20px">
-    <div class='row'>
-        <label for="ID">ID</label>
-        <input type="number" id="ID" min="0"/>
-    </div>
-    <div class='row'>
-        <label for="Name">Имя</label>
-        <input type="text" id="Name"/>
-    </div>
-    <div class='row'>
-        <label for="Bday">День рождения</label>
-        <input type="date" id="Bday"/>
-    </div>
+<div class='row'>
+    <button onclick="insert()">Добавить</button>
+</div>
+<div class='row'>
+    <label for="IDinsert">ID</label>
+    <input type="number" id="IDinsert" min="0" required/>
+</div>
+<div class='row'>
+    <label for="NameInsert">Имя</label>
+    <input type="text" id="NameInsert" required/>
+</div>
+<div class='row'>
+    <label for="BdayInsert">День рождения</label>
+    <input type="date" id="BdayInsert" required/>
+</div>
 
-    <div class='row'>
-        <button onclick="insert()">Добавить</button>
-    </div>
-    <div class='row'>
-        <button onclick="update()">Обновить по ID</button>
-    </div>
-    <div class='row'>
-        <button onclick="remove()">Удалить по ID</button>
-    </div>
+<div class='row'>
+    <button onclick="update()">Обновить по ID</button>
+</div>
+<div class='row'>
+    <label for="IDupdate">ID</label>
+    <input type="number" id="IDupdate" min="0" required onchange="getPersonById()"/>
+</div>
+<div class='row'>
+    <label for="NameUpdate">Имя</label>
+    <input type="text" id="NameUpdate" required/>
+</div>
+<div class='row'>
+    <label for="BdayUpdate">День рождения</label>
+    <input type="date" id="BdayUpdate" required/>
+</div>
+<div class='row'>
+    <button onclick="remove()">Удалить по ID</button>
+</div>
+<div class='row'>
+    <label for="IDdelete">ID</label>
+    <input type="number" id="IDdelete" min="0" required/>
 </div>
 
 <script>
@@ -87,58 +106,96 @@
             })
     }
     const insert = () => {
+        error.innerHTML = "";
         fetch("/api/db", {
             method: "POST",
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
             mode: "no-cors",
             body: JSON.stringify({
-                id: ID.value,
-                name: Name.value,
-                bday: Bday.value,
+                id: IDinsert.value,
+                name: NameInsert.value,
+                bday: BdayInsert.value,
             })
         })
             .then(response => response.json())
             .then(data => {
-                ID.value = "";
-                Name.value = "";
-                Bday.value = "";
+                console.log(data)
+                if (data.error) {
+                    error.innerHTML = data.error;
+                }
+                IDinsert.value = "";
+                NameInsert.value = "";
+                BdayInsert.value = "";
+                select();
             })
     }
 
     const update = () => {
+        error.innerHTML = "";
         fetch("/api/db", {
             method: "PUT",
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
             body: JSON.stringify({
-                id: ID.value,
-                name: Name.value,
-                bday: Bday.value,
+                id: IDupdate.value,
+                name: NameUpdate.value,
+                bday: BdayUpdate.value,
             })
         })
             .then(response => response.json())
             .then(data => {
-                ID.value = "";
-                Name.value = "";
-                Bday.value = "";
+                console.log(data)
+                if (data.error) {
+                    error.innerHTML = data.error;
+                }
+                IDupdate.value = "";
+                NameUpdate.value = "";
+                BdayUpdate.value = "";
+                select();
             })
     };
 
     const remove = () => {
+        error.innerHTML = "";
         fetch("/api/db", {
             method: "DELETE",
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
             body: JSON.stringify({
-                id: ID.value,
-                name: Name.value,
-                bday: Bday.value,
+                id: IDdelete.value,
             })
         })
             .then(response => response.json())
             .then(data => {
-                ID.value = "";
-                Name.value = "";
-                Bday.value = "";
+                console.log(data)
+                if (data.error) {
+                    error.innerHTML = data.error;
+                }
+                IDdelete.value = "";
+                select();
             })
+    };
+
+    const getPersonById = async () => {
+        let people = await fetch("/api/db", {method: "GET", headers: {'Accept': 'application/json'}, mode: "no-cors"})
+            .then(response => response.json());
+
+        let current_person = null;
+        for (let person of people) {
+            if (person.id == IDupdate.value) {
+                current_person = person;
+                break;
+            }
+        }
+
+        if (current_person !== null) {
+            NameUpdate.value = current_person.name;
+            let pattern = /(\d{2})\-(\d{2})\-(\d{4})/;
+            BdayUpdate.value = current_person.bday.replace(pattern,'$3-$2-$1');
+        } else {
+            error.innerHTML = "There's no person with such ID";
+            IDupdate.value = "";
+            NameUpdate.value = "";
+            BdayUpdate.value = "";
+        }
     };
 </script>
 </body>

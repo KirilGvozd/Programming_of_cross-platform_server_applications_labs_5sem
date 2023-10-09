@@ -17,6 +17,13 @@ db.on('POST', (req, res) => {
     console.log('DB POST');
     req.on('data', (data) => {
         let r = JSON.parse(data);
+
+        if (r.id === '' || r.name === '' || r.bday === '') {
+            res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
+            res.end(JSON.stringify({error: 'Fields cannot be empty!'}));
+            return;
+        }
+
         db.insert(r).then(data => {
             res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
             res.end(JSON.stringify(data));
@@ -31,6 +38,13 @@ db.on('PUT', (req, res) => {
     console.log('DB PUT');
     req.on('data', (data) => {
         let r = JSON.parse(data);
+
+        if (r.id === '' || r.name === '' || r.bday === '') {
+            res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
+            res.end(JSON.stringify({error: 'Fields cannot be empty!'}));
+            return;
+        }
+
         db.update(r).then(data => {
             res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
             res.end(JSON.stringify(data));
@@ -46,12 +60,19 @@ db.on('DELETE', (req, res) => {
     console.log('DB DELETE');
     req.on('data', (data) => {
         let r = JSON.parse(data);
+
+        if (r.id === '' || r.name === '' || r.bday === '') {
+            res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
+            res.end(JSON.stringify({error: 'Fields cannot be empty!'}));
+            return;
+        }
+
         db.delete(r.id).then((data) => {
             res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
             res.end(JSON.stringify(data));
         }).catch((err) => {
             res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
-            res.end(JSON.stringify(err));
+            res.end(JSON.stringify( err));
         });
     });
 });
