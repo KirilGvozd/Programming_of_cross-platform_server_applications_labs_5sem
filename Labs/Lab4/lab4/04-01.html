@@ -58,38 +58,38 @@
 
 <br/>
 <div class='row'>
-    <button onclick="insert()">Добавить</button>
+    <button onclick="insert()">Add</button>
 </div>
 <div class='row'>
     <label for="IDinsert">ID</label>
     <input type="number" id="IDinsert" min="0" required/>
 </div>
 <div class='row'>
-    <label for="NameInsert">Имя</label>
+    <label for="NameInsert">Name</label>
     <input type="text" id="NameInsert" required/>
 </div>
 <div class='row'>
-    <label for="BdayInsert">День рождения</label>
+    <label for="BdayInsert">Birthdate</label>
     <input type="date" id="BdayInsert" required/>
 </div>
 
 <div class='row'>
-    <button onclick="update()">Обновить по ID</button>
+    <button onclick="update()">Update by ID</button>
 </div>
 <div class='row'>
     <label for="IDupdate">ID</label>
-    <input type="number" id="IDupdate" min="0" required onchange="getPersonById()"/>
+    <input type="number" id="IDupdate" min="0" required onchange="getObjectById()"/>
 </div>
 <div class='row'>
-    <label for="NameUpdate">Имя</label>
+    <label for="NameUpdate">Name</label>
     <input type="text" id="NameUpdate" required/>
 </div>
 <div class='row'>
-    <label for="BdayUpdate">День рождения</label>
+    <label for="BdayUpdate">Birthdate</label>
     <input type="date" id="BdayUpdate" required/>
 </div>
 <div class='row'>
-    <button onclick="remove()">Удалить по ID</button>
+    <button onclick="remove()">Delete by ID</button>
 </div>
 <div class='row'>
     <label for="IDdelete">ID</label>
@@ -174,7 +174,7 @@
             })
     };
 
-    const getPersonById = async () => {
+    const getObjectById = async () => {
         let people = await fetch("/api/db", {method: "GET", headers: {'Accept': 'application/json'}, mode: "no-cors"})
             .then(response => response.json());
 
@@ -190,6 +190,7 @@
             NameUpdate.value = current_person.name;
             let pattern = /(\d{2})\-(\d{2})\-(\d{4})/;
             BdayUpdate.value = current_person.bday.replace(pattern,'$3-$2-$1');
+
         } else {
             error.innerHTML = "There's no person with such ID";
             IDupdate.value = "";

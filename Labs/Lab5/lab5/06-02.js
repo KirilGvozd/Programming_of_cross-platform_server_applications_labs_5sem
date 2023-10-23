@@ -5,21 +5,20 @@ const path = require('path');
 const querystring = require('querystring');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    host: 'smtp.gmail.com',
+    port: 465,
     auth: {
-        user: 'someEmail',
-        pass: 'somePassword'
+        user: 'login',
+        pass: 'password'
     }
 });
 
 http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/') {
-        // Отправка HTML-страницы с формой
-        fs.readFile(path.join(__dirname, '06-02.html'), 'utf8', (err, data) => {
+        fs.readFile('06-02.html', 'utf8', (err, data) => {
             if (err) {
                 res.writeHead(500, { 'Content-Type': 'text/html' });
-                res.end('Ошибка чтения файла');
+                res.end('Error reading the file.');
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(data);
@@ -46,14 +45,14 @@ http.createServer((req, res) => {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 if (error) {
                     console.log(error);
-                    res.end('Ошибка отправки письма.');
+                    res.end('Failed to send a message.');
                 } else {
                     console.log('Email отправлен: ' + info.response);
-                    res.end('Письмо успешно отправлено.');
+                    res.end('Letter is sent successfully.');
                 }
             });
         });
     }
-}).listen(5000);
+}).listen(3000);
 
-console.log(`Server is running at http://localhost:5000`);
+console.log(`Server is running at http://localhost:3000`);

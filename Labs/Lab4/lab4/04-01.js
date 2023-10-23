@@ -24,6 +24,12 @@ db.on('POST', (req, res) => {
             return;
         }
 
+        if (!checkDate(r.bday)) {
+            res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
+            res.end(JSON.stringify({error: 'Birthdate can\'t be more, than today\'s date!'}));
+            return;
+        }
+
         db.insert(r).then(data => {
             res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
             res.end(JSON.stringify(data));
@@ -87,3 +93,9 @@ http.createServer((req, res) => {
         db.emit(req.method, req, res);
     }
 }).listen(5000, () => console.log('Server is running at http://localhost:5000'));
+
+let checkDate = (date) => {
+    let pattern = /(\d{2})\-(\d{2})\-(\d{4})/;
+    let new_date = date.replace(pattern,'$3-$2-$1');
+    return new Date(date) <= new Date();
+}
