@@ -1,0 +1,10 @@
+{
+  "__commment": "Request. Lab6/8",
+  "x": 1,
+  "y": 2,
+  "s": "Message",
+  "m": [1, 2, 3, 4],
+  "o": {"surname": "Gvozdovskiy",
+    "name": "Kirill"
+  }
+}

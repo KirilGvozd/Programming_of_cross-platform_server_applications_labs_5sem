@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <style>
+        * {
+            font-family: "Roboto Light",serif;
+        }
+
+        #container {
+            margin: 20px 0 0 10px;
+        }
+
+        input {
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        textarea {
+            width: 207px;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        input[type="submit"] {
+            height: 2em;
+            font-size: 1rem;
+            background-color: rgb(248, 248, 248);
+            color: #2f2f2f;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            margin: 10px 10px;
+            cursor: pointer;
+        }
+
+        .checks {
+            margin-right: 20px;
+        }
+
+        td {
+            padding: 12px 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="container">
+    <form action="/formparameter" method="POST">
+        <table id="container_table">
+            <tr>
+                <td>Text</td>
+                <td><input type="text" id="inpText" name="inputText" required></td>
+            </tr>
+
+            <tr>
+                <td>Number</td>
+                <td><input type="number" id="inpNumber" name="inputNumber" required></td>
+            </tr>
+
+            <tr>
+                <td>Date</td>
+                <td><input type="date" id="inpDate" name="inputDate" required></td>
+            </tr>
+
+            <tr>
+                <td>Checkbox</td>
+                <td>
+                    <input type="checkbox" value="inputCheck1" id="inpCheck1" name="inputCheck" class="checks">
+                    <input type="checkbox" value="inputCheck2" id="inpCheck2" name="inputCheck" class="checks">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Radiobutton</td>
+                <td>
+                    <input type="radio" value="inputRadio1" id="inpRadio1" name="inputRadio" class="radios">
+                    <input type="radio" value="inputRadio2" id="inpRadio2" name="inputRadio" class="radios">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Textarea</td>
+                <td><textarea id="inpTextarea" name="inputTextArea" required></textarea></td>
+            </tr>
+
+
+            <tr>
+                <td><input type="submit" name="inputSubmitForm" value="Send"></td>
+                <td><input type="submit" name="inputSubmitForm" value="Send 2nd"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
