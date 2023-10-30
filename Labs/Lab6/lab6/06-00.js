@@ -3,6 +3,8 @@ const url = require('url');
 const fs = require('fs');
 const qs = require('querystring');
 const xml2js = require('xml2js');
+const path = require("path");
+const multiparty = require('multiparty');
 
 let server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
@@ -154,6 +156,7 @@ let server = http.createServer((req, res) => {
         });
     }
 
+    // Task 9
     else if (req.method === 'POST' && parsedUrl.pathname === '/xml') {
         let xmlData = '';
 
@@ -196,6 +199,89 @@ let server = http.createServer((req, res) => {
                 }
             })
         })
+    }
+
+
+    // Task 10
+    else if (req.method === 'GET' && parsedUrl.pathname === '/files') {
+        const staticDirectory = './static';
+
+        fs.readdir(staticDirectory, (err, files) => {
+            if (err) {
+                res.writeHead(500, { 'Content-type': 'text/html' });
+                res.end('<h1>Internal Server Error</h1>');
+            } else {
+                res.writeHead(200, { 'X-files-count': files.length, 'Content-type': 'text/html' });
+                res.end(`Number of files in directory static is ${files.length}`);
+            }
+        });
+    }
+
+    // Task 11
+    else if (req.method === 'GET' && parsedUrl.pathname.startsWith('/files/')) {
+        // Извлекаем имя файла из URL
+        const filename = url.parse(req.url).pathname.split('/')[2];
+
+        // Формируем путь к файлу в директории static
+        const filePath = path.join(__dirname, 'static', filename);
+
+        // Проверяем, существует ли файл
+        fs.stat(filePath, (err, stats) => {
+            if (err || !stats.isFile()) {
+                // Файл не найден, отправляем статус 404
+                res.writeHead(404, { 'Content-type': 'text/html' });
+                res.end('<h1>File Not Found</h1>');
+            } else {
+                // Файл найден, отправляем его как ответ
+                res.end(fs.readFileSync(`static/${filename}`));
+            }
+        });
+    }
+
+    // Task 12
+    else if (req.method === 'GET' && req.url === '/upload') {
+        // Отправляем web-форму для загрузки файла
+        res.writeHead(200, { 'Content-type': 'text/html' });
+        res.end(`
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+      </form>
+    `);
+    }
+
+    else if (req.method === 'POST' && req.url === '/upload') {
+        const form = new multiparty.Form();
+
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                res.writeHead(500, { 'Content-type': 'text/html' });
+                res.end('<h1>Internal Server Error</h1>');
+                return;
+            }
+
+            if (files.file && files.file.length > 0) {
+                const uploadedFile = files.file[0];
+
+                // Указываем путь для сохранения файла
+                const savePath = './static/' + uploadedFile.originalFilename;
+
+                // Сохраняем файл
+                fs.rename(uploadedFile.path, savePath, (err) => {
+                    if (err) {
+                        res.writeHead(500, { 'Content-type': 'text/html' });
+                        res.end('<h1>Internal Server Error</h1>');
+                        return;
+                    }
+
+                    res.writeHead(200, { 'Content-type': 'text/html' });
+                    res.end('<h1>File uploaded successfully</h1>');
+                });
+            } else {
+                res.writeHead(400, { 'Content-type': 'text/html' });
+                res.end('<h1>No file uploaded</h1>');
+            }
+        });
     }
 
     else {
