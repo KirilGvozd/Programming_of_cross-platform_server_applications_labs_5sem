@@ -173,15 +173,12 @@ let server = http.createServer((req, res) => {
                     const request = result.request;
                     const requestId = request.$.id;
 
-                    // Обрабатываем элементы x
                     const xElements = request.x || [];
                     const xSum = xElements.reduce((sum, x) => sum + parseInt(x.$.value || 0), 0);
 
-                    // Обрабатываем элементы m
                     const mElements = request.m || [];
                     const mConcat = mElements.map(m => m.$.value).join('');
 
-                    // Формируем структуру для ответа
                     const response = {
                         response: {
                             $: { id: 33, request: requestId },
@@ -190,7 +187,6 @@ let server = http.createServer((req, res) => {
                         }
                     };
 
-                    // Преобразуем структуру ответа в XML
                     const builder = new xml2js.Builder();
                     const responseXML = builder.buildObject(response);
 
@@ -219,20 +215,15 @@ let server = http.createServer((req, res) => {
 
     // Task 11
     else if (req.method === 'GET' && parsedUrl.pathname.startsWith('/files/')) {
-        // Извлекаем имя файла из URL
         const filename = url.parse(req.url).pathname.split('/')[2];
 
-        // Формируем путь к файлу в директории static
         const filePath = path.join(__dirname, 'static', filename);
 
-        // Проверяем, существует ли файл
         fs.stat(filePath, (err, stats) => {
             if (err || !stats.isFile()) {
-                // Файл не найден, отправляем статус 404
                 res.writeHead(404, { 'Content-type': 'text/html' });
                 res.end('<h1>File Not Found</h1>');
             } else {
-                // Файл найден, отправляем его как ответ
                 res.end(fs.readFileSync(`static/${filename}`));
             }
         });
@@ -240,7 +231,6 @@ let server = http.createServer((req, res) => {
 
     // Task 12
     else if (req.method === 'GET' && req.url === '/upload') {
-        // Отправляем web-форму для загрузки файла
         res.writeHead(200, { 'Content-type': 'text/html' });
         res.end(`
       <form action="/upload" method="post" enctype="multipart/form-data">
@@ -263,10 +253,8 @@ let server = http.createServer((req, res) => {
             if (files.file && files.file.length > 0) {
                 const uploadedFile = files.file[0];
 
-                // Указываем путь для сохранения файла
                 const savePath = './static/' + uploadedFile.originalFilename;
 
-                // Сохраняем файл
                 fs.rename(uploadedFile.path, savePath, (err) => {
                     if (err) {
                         res.writeHead(500, { 'Content-type': 'text/html' });
