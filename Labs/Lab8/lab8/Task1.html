@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 1</title>
+</head>
+<script type="text/javascript">
+    function startWS() {
+        let n = 0;
+        let socket = new WebSocket('ws://localhost:4000/webSocketServer');
+        let sendingInterval = null;
+
+        socket.onopen = () => {
+            console.log('Socket has been opened');
+            sendingInterval = setInterval(() => socket.send(`08-01-client: ${++n}`), 3000);
+        }
+
+        socket.onclose = (e) => console.log('Socket is closed');
+
+        socket.onmessage = (message) => content.innerHTML += `<h3>${message.data}</h3>`;
+
+        socket.onerror = (e) => console.log('Socket error', e);
+
+        setTimeout(() => {
+            clearInterval(sendingInterval);
+            socket.close(1000, 'Closing socket');
+            content.innerHTML += `<h2>The end</h2>`
+        }, 25000);
+    }
+</script>
+<body>
+<h1>Lab 8 Task 1</h1>
+<button type="button" onclick="startWS()">Start WebSocket server</button>
+<div id="content"></div>
+</body>
+</html>
