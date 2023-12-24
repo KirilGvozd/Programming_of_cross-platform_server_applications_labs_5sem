@@ -35,9 +35,8 @@ webSocketServer.register('fact', (params) => {
 
 
 webSocketServer.register('fib', (params) => {
-    if (params.length !== 1)
-        return [1];
-    return fibonacci(params-1);
+    const n = params[0];
+    return fibonacci(n);
 }).protected();
 
 
@@ -48,6 +47,17 @@ function factorial(n) {
 }
 
 function fibonacci(n) {
-    if (n <= 1) return 1;
-    return fibonacci(n - 1) + fibonacci(n - 2);
+    let sequence = [];
+    if (n === 1) {
+        sequence.push(0);
+    } else if (n >= 2) {
+        sequence = [0, 1];
+
+        for (let i = 2; i < n; i++) {
+            const nextElement = sequence[i - 1] + sequence[i - 2];
+            sequence.push(nextElement);
+        }
+    }
+
+    return sequence;
 }

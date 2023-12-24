@@ -8,5 +8,5 @@ webSocketServer.on('connection', (ws) => {
     const duplex = webSocket.createWebSocketStream(ws, {encoding: 'utf-8'});
     let file = fs.createWriteStream(`./upload/File${++counter}.txt`);
     duplex.pipe(file);
-    console.log('File was uploaded.')
-})
+    console.log('File was uploaded.');
+});

@@ -1,8 +1,6 @@
 const rpcWebSocket = require('rpc-websockets').Client;
 let ws = new rpcWebSocket('ws://localhost:4000/');
 
-
-
 ws.on('open', () => {
     ws.call('square', [3]).then(r => { console.log(`\nSquare of the circle: ${r}`) });
     ws.call('square', [5, 4]).then(r => { console.log(`Square of a rectangle = ${r}`) });
@@ -24,5 +22,5 @@ ws.on('open', () => {
             console.log('Incorrect login or password.');
     }, (error) => {
         console.log(error.message);
-    })
+    });
 });

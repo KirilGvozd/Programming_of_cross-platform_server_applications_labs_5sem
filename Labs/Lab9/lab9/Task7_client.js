@@ -18,5 +18,5 @@ webSocket.on('open', () => {
                     break;
             }
         }
-    })
-})
+    });
+});
